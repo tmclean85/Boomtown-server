@@ -15,12 +15,13 @@ const typeDefs = `
   type Item {
     id: ID! 
     title: String! 
-    imageUrl: String! 
+    imageUrl: String
     tags: [String] 
     itemOwner: User! 
     createdOn: Int! 
     available: Boolean! 
     borrower: User 
+    description: String
   }
 
   type Query {
@@ -29,6 +30,16 @@ const typeDefs = `
     items: [Item] 
     item(id: ID!): Item
   }
+
+  type Mutation {
+    addItem(
+      title: String!
+      imageUrl: String
+      itemOwner: ID!
+      description: String!
+      tags: [String!]
+    ): Item
+  } 
 `;
 
 export default makeExecutableSchema({ 
