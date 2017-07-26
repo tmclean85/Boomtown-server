@@ -1,12 +1,18 @@
+
 import fetch from 'node-fetch';
-import { 
+import {
   getItems,
   getItem,
-  getUsers,
-  getUser,
   getUserItems,
   getUserBorrowedItems,
 } from './jsonServer';
+
+import {
+  getUser,
+  getUsers,
+  addUser,
+  createUser
+} from './postgresDB';
 
 const resolveFunctions = {
   Query: {
@@ -23,6 +29,7 @@ const resolveFunctions = {
       return context.loaders.SingleItem.load(id)
     },
   },
+
   User: {
     items: (user, args, context) => {
       // return getUserItems(user.id);
@@ -33,19 +40,18 @@ const resolveFunctions = {
     },
   },
   Item: {
-    itemOwner(item) {
-      return getUser(item.itemOwner);
+    itemOwner(item, args, context) {
+      return context.loaders.SingleUser.load(item.itemOwner);
     },
-    borrower(item) {
+    borrower(item, args, context) {
       if (!item.borrower) return null;
-      return getUser(item.borrower)
+      return context.loaders.SingleUser.load(item.borrower);
     }
   },
 
   Mutation: {
     addItem(root, args) {
       const newItem = {
-
         title: args.title,
         imageUrl: args.imageUrl,
         borrower: null,
@@ -56,6 +62,9 @@ const resolveFunctions = {
         available: true,
       };
       return postItem(newItem);
+    },
+    addUser(root, args) {
+        return createUser(args)
     }
   }
 }

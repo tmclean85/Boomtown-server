@@ -1,5 +1,5 @@
 import DataLoader from 'dataloader';
-import { 
+import {
   getUserItems,
   getUserBorrowedItems,
   getItem,
@@ -20,5 +20,9 @@ export default function() {
     SingleUser: new DataLoader(ids => (
       Promise.all(ids.map(id => getUser(id))
     ))),
+
+    // getUser: new DataLoader(ids => {      
+    //   return Promise.all(ids.map(id => getUser(id)))
+    // }),
   }
 };
