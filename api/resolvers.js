@@ -63,10 +63,10 @@ const resolveFunctions = {
       };
       return postItem(newItem);
     },
-    addUser(root, args) {
-        return createUser(args)
+    addUser(root, args, context) {
+        return createUser(args, context)
     }
   }
-}
+};
 
 export default resolveFunctions;

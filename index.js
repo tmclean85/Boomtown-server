@@ -8,6 +8,7 @@ import {
 import cors from 'cors';
 import schema from './api/schema';
 import createLoaders from './api/loaders';
+import admin from './database/firebase.js';
 
 const app = express();
 
@@ -21,16 +22,21 @@ if(process.env.NODE_ENV === 'production') {
 }
 
 app.use('*', cors());
+app.use(bodyParser.json());
 
-app.use('/graphql', (req, res, next) => {
-  //TODO Add Firebase Token Validation
-  next();
-});
-
-app.use('/graphql', bodyParser.json(), graphqlExpress({ 
+app.use('/graphql', graphqlExpress({ 
   schema,
   context: {
     loaders: createLoaders()
+  }
+}));
+
+app.use('/graphql', graphiqlExpress(function(req, res, next){
+  return {
+    schema,
+    context: {
+      loaders: createLoaders()
+    }
   }
 }));
 

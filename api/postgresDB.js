@@ -5,9 +5,9 @@ export async function getUser(id) {
   return new Promise(async (res, rej) => {
     try {
       let user = await pool.query(`SELECT * from user_profiles WHERE userid='${id}'`)
-      const fbuser = await admin.auth().getUser(id)
+      const fbUser = await admin.auth().getUser(id)
       user = renameId(user)[0];
-      user = {...user, email: fbuser.email};
+      user = {...user, email: fbUser.email};
       res(user);
       } catch(e) {
          console.log(e);
@@ -46,7 +46,7 @@ function renameId(item) {
   })
 }
 
-export function createUser(args) {
+export function createUser(args, context) {
   return new Promise(async (resolve, reject) => {
     try {
       const fbUser = await admin.auth().createUser({
