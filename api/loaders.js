@@ -4,7 +4,7 @@ import {
   getUserBorrowedItems,
   getItem,
   getUser 
-} from './jsonServer';
+} from './postgresDB';
 
 export default function() {
   return {

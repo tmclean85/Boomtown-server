@@ -1,7 +1,3 @@
-import fetch from 'node-fetch';
-
-// Query helpers
-
 export function getItems() {
   return fetch(`http://localhost:3001/items/`)
          .then(response => response.json())
@@ -36,15 +32,13 @@ export function getUserItems(user) {
 
 export function getUserBorrowedItems(user) {
   return fetch(`http://localhost:3001/items/?borrower=${user.id}`)
-  .then((response) => { 
-    response.json()
-  })
+  .then((response) => response.json())
   .catch(errors => console.log(errors))
 };
 
 // Post helper
 
-export function postItem(newItem) {
+export function newItem(newItem) {
   return fetch(`http://localhost:3001/items/`, {
     method: 'POST',
     headers: {
@@ -52,7 +46,8 @@ export function postItem(newItem) {
     },
     body: JSON.stringify(newItem)
   }).then(resposne => response.json())
-    .catch(errors => console.log(errors));     
+    .catch(errors => console.log(errors));
+    return addItem;
 }
 
 

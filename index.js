@@ -11,27 +11,28 @@ import createLoaders from './api/loaders';
 import admin from './database/firebase.js';
 
 const app = express();
-
 const GQL_PORT = 5000;
 const PORT = process.env.PORT;
-
-if(process.env.NODE_ENV === 'production') {
-  const root = `$(_dirname)/public`
-  app.use(express.static(root));
-  app.use(fallback('index.html', { root }));
-}
 
 app.use('*', cors());
 app.use(bodyParser.json());
 
-app.use('/graphql', graphqlExpress({ 
+
+// if(process.env.NODE_ENV === 'production') {
+//   const root = `$(_dirname)/public`
+//   app.use(express.static(root));
+//   app.use(fallback('index.html', { root }));
+// }
+
+
+app.use('/graphql', graphqlExpress({
   schema,
   context: {
     loaders: createLoaders()
   }
 }));
 
-app.use('/graphql', graphiqlExpress(function(req, res, next){
+app.use('/graphql', graphiqlExpress(function(req, res){
   return {
     schema,
     context: {

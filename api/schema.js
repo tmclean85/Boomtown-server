@@ -15,30 +15,42 @@ const typeDefs = `
   type Item {
     id: ID! 
     title: String! 
-    imageUrl: String
-    tags: [String] 
-    itemOwner: User! 
-    createdOn: Int! 
+    imageurl: String
+    tags: [Tag] 
+    itemowner: User! 
+    createdon: Int! 
     available: Boolean! 
     borrower: User 
     description: String
   }
 
+  type Tag {
+    id: Int!
+    title: String!
+    description: String!
+  }
+
+  input AssignedTag {
+    id: Int!
+  }
+
   type Query {
-    users: [User] 
-    user(id: ID!): User 
-    items: [Item] 
+    users: [User]
+    user(id: ID!): User
+    items: [Item]
     item(id: ID!): Item
+    tag(id: ID!): Tag
   }
 
   type Mutation {
     addItem(
       title: String!
-      imageUrl: String
-      itemOwner: ID!
+      imageurl: String
+      itemowner: ID!
       description: String!
-      tags: [String!]
+      tags: [AssignedTag]
     ): Item
+
     addUser(
       fullname: String!
       email: String!
@@ -48,7 +60,7 @@ const typeDefs = `
   } 
 `;
 
-export default makeExecutableSchema({ 
+export default makeExecutableSchema({
   typeDefs,
   resolvers
 })

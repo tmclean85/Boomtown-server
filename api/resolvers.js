@@ -1,17 +1,18 @@
 
 import fetch from 'node-fetch';
-import {
-  getItems,
-  getItem,
-  getUserItems,
-  getUserBorrowedItems,
-} from './jsonServer';
 
 import {
   getUser,
   getUsers,
   addUser,
-  createUser
+  createUser,
+  getItems,
+  getItem,
+  getUserItems,
+  getUserBorrowedItems,
+  newItem,
+  getTagsfromItem,
+  getItemsFromTags  
 } from './postgresDB';
 
 const resolveFunctions = {
@@ -33,15 +34,18 @@ const resolveFunctions = {
   User: {
     items: (user, args, context) => {
       // return getUserItems(user.id);
-      return context.loaders.UserOwnedItems.load(user)
+      return context.loaders.UserOwnedItems.load(user.id)
     },
     borrowed: (user, args, context) => {
-      return context.loaders.UserBorrowedItems.load(user)
+      return context.loaders.UserBorrowedItems.load(user.id)
     },
   },
   Item: {
-    itemOwner(item, args, context) {
-      return context.loaders.SingleUser.load(item.itemOwner);
+    tags: (item) => {
+      return postgres.getTagsfromItem(item.id)
+    },
+    itemowner(item, args, context) {
+      return context.loaders.SingleUser.load(item.itemowner);
     },
     borrower(item, args, context) {
       if (!item.borrower) return null;
@@ -49,22 +53,21 @@ const resolveFunctions = {
     }
   },
 
+  // Tags: {
+  //   getTagsForItem() {
+  //     context.loaders.getTagsfromItem.load();
+  //   },
+  //   getItemsForTags() {
+  //     context.loaders.getItemsFromTags.load();
+  //   }
+  // },
+
   Mutation: {
     addItem(root, args) {
-      const newItem = {
-        title: args.title,
-        imageUrl: args.imageUrl,
-        borrower: null,
-        itemOwner: args.itemOwner,
-        description: args.description,
-        tags: args.tags,
-        createdOn: Math.floor(new Date.now() / 1000),
-        available: true,
-      };
-      return postItem(newItem);
+      return postgres.newItem(args);
     },
     addUser(root, args, context) {
-        return createUser(args, context)
+      return postgres.createUser(args, context)
     }
   }
 };
