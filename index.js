@@ -9,6 +9,7 @@ import cors from 'cors';
 import schema from './api/schema';
 import createLoaders from './api/loaders';
 import admin from './database/firebase.js';
+import fireBaseAuthMiddleware from './api/middleware';
 
 const app = express();
 const GQL_PORT = 5000;
@@ -16,7 +17,7 @@ const PORT = process.env.PORT;
 
 app.use('*', cors());
 app.use(bodyParser.json());
-
+app.use('/graphql', fireBaseAuthMiddleware); 
 
 // if(process.env.NODE_ENV === 'production') {
 //   const root = `$(_dirname)/public`

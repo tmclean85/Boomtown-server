@@ -16,18 +16,17 @@ const typeDefs = `
     id: ID! 
     title: String! 
     imageurl: String
-    tags: [Tag] 
+    tags: [Tag]! 
     itemowner: User! 
-    createdon: Int! 
-    available: Boolean! 
+    createdon: String!
+    available: Boolean
     borrower: User 
     description: String
   }
 
   type Tag {
-    id: Int!
+    id: ID!
     title: String!
-    description: String!
   }
 
   input AssignedTag {
@@ -39,6 +38,7 @@ const typeDefs = `
     user(id: ID!): User
     items: [Item]
     item(id: ID!): Item
+    tags: [Tag]
     tag(id: ID!): Tag
   }
 
@@ -49,14 +49,14 @@ const typeDefs = `
       itemowner: ID!
       description: String!
       tags: [AssignedTag]
-    ): Item
+    ) : Item
 
     addUser(
       fullname: String!
       email: String!
       bio: String
       password: String!
-    ): User
+    ) : User
   } 
 `;
 

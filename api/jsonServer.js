@@ -1,3 +1,5 @@
+import fetch from 'node-fetch';
+
 export function getItems() {
   return fetch(`http://localhost:3001/items/`)
          .then(response => response.json())
